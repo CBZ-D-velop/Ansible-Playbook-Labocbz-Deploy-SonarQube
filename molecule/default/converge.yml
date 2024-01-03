@@ -1,0 +1,5 @@
+---
+- name: "Include labocbz.deploy_sonarqube playbook"
+  tags:
+      - "labocbz.deploy_sonarqube"
+  ansible.builtin.import_playbook: "../../playbook.yml"
