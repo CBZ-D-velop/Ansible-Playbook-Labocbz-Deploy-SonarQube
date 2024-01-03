@@ -1,10 +1,160 @@
 ---
-- name: "labocbz.deploy_sonarqube"
-  hosts: "[]"
+- name: "Deploy SonarQube"
+  hosts: "{{ tower_env | default([]) }}"
   gather_facts: true
-  remote_user: root
   become: true
   become_method: sudo
   become_user: root
 
   tasks:
+    - name: "Install SonarQube"
+      when: inv_install_sonarqube | default(false)
+      block:
+        - name: "Include labocbz.prepare_host"
+          tags:
+            - "labocbz.prepare_host"
+          vars:
+            prepare_host_system_users: "{{ inv_prepare_host_sonarqube_system_users }}"
+          ansible.builtin.include_role:
+            name: "labocbz.prepare_host"
+
+        - name: "Include labocbz.install_java"
+          tags:
+          - "labocbz.install_java"
+          vars:
+            java_version: "{{ inv_java_version }}"
+            java_cpu_architecture: "{{ inv_java_cpu_architecture }}"
+            java_version_is_default: true
+          ansible.builtin.include_role:
+            name: "labocbz.install_java"
+
+        - name: "Include labocbz.install_sonarqube"
+          tags:
+            - "labocbz.install_sonarqube"
+          vars:
+            install_sonarqube_user: "{{ inv_install_sonarqube_user }}"
+            install_sonarqube_group: "{{ inv_install_sonarqube_group }}"
+            install_sonarqube_postgres_user: "{{ inv_install_sonarqube_postgres_user }}"
+            install_sonarqube_postgres_group: "{{ inv_install_sonarqube_postgres_group }}"
+            install_sonarqube_postgres_sonarqube_login: "{{ inv_install_sonarqube_postgres_sonarqube_login }}"
+            install_sonarqube_postgres_sonarqube_password: "{{ inv_install_sonarqube_postgres_sonarqube_password }}"
+            install_sonarqube_lib_path: "{{ inv_install_sonarqube_lib_path }}"
+            install_sonarqube_log_path: "{{ inv_install_sonarqube_log_path }}"
+            install_sonarqube_version: "{{ inv_install_sonarqube_version }}"
+            install_sonarqube_web_heap: "{{ inv_install_sonarqube_web_heap }}"
+            install_sonarqube_web_host: "{{ inv_install_sonarqube_web_host }}"
+            install_sonarqube_web_context: "{{ inv_install_sonarqube_web_context }}"
+            install_sonarqube_web_port: "{{ inv_install_sonarqube_web_port }}"
+            install_sonarqube_elasticsearch_heap: "{{ inv_install_sonarqube_elasticsearch_heap }}"
+            install_sonarqube_log_level: "{{ inv_install_sonarqube_log_level }}"
+            install_sonarqube_log_retention: "{{ inv_install_sonarqube_log_retention }}"
+            install_sonarqube_elasticsearch_port: "{{ inv_install_sonarqube_elasticsearch_port }}"
+            install_sonarqube_elasticsearch_host: "{{ inv_install_sonarqube_elasticsearch_host }}"
+          ansible.builtin.include_role:
+            name: "labocbz.install_sonarqube"
+
+    - name: "Install Apache2"
+      when: inv_install_apache | default(false)
+      block:
+        - name: "Include labocbz.prepare_host"
+          tags:
+            - "labocbz.prepare_host"
+          vars:
+            prepare_host_system_users: "{{ inv_prepare_host_apache_system_users }}"
+          ansible.builtin.include_role:
+            name: "labocbz.prepare_host"
+
+        - name: "Include labocbz.add_certificates"
+          tags:
+            - "labocbz.add_certificates"
+          loop: "{{ inv_add_apache_confs_configurations_cert_bundles }}"
+          loop_control:
+            loop_var: bundle
+          when: inv_add_apache_confs_configurations_cert_bundles is defined
+          vars:
+            add_certificates_bundle_name: "{{ bundle.name }}"
+            add_certificates_bundle_type: "{{ bundle.type }}"
+            add_certificates_bundle_src: "{{ bundle.src }}"
+            add_certificates_bundle_dest: "{{ bundle.dest }}"
+            add_certificates_bundle_src_user: "{{ bundle.src_user }}"
+            add_certificates_bundle_src_password: "{{ bundle.src_password }}"
+            add_certificates_bundle_dest_user: "{{ bundle.dest_user }}"
+            add_certificates_bundle_dest_group: "{{ bundle.dest_group }}"
+            add_certificates_bundle_dest_mode: "{{ bundle.dest_mode }}"
+          ansible.builtin.include_role:
+            name: "labocbz.add_certificates"
+
+        - name: "Include labocbz.install_apache"
+          tags:
+            - "labocbz.install_apache"
+          vars:
+            install_apache_https_listen_port: "{{ inv_install_apache_https_listen_port }}"
+            install_apache_http_listen_port: "{{ inv_install_apache_http_listen_port }}"
+            install_apache_modules: "{{ inv_install_apache_modules }}"
+            install_apache_enable_qos: "{{ inv_install_apache_enable_qos }}"
+            install_apache_enable_security: "{{ inv_install_apache_enable_security }}"
+            install_apache_security_core_version: "{{ inv_install_apache_security_core_version }}"
+            install_apache_remove_all_vhosts: "{{ inv_install_apache_remove_all_vhosts }}"
+            install_apache_loglevel: "{{ inv_install_apache_loglevel }}"
+            install_apache_security_version: "{{ inv_install_apache_security_version }}"
+            install_apache_enable_evasive: "{{ inv_install_apache_enable_evasive }}"
+            install_apache_enable_pagespeed: "{{ inv_install_apache_enable_pagespeed }}"
+            install_apache_enable_prefork: "{{ inv_install_apache_enable_prefork }}"
+          ansible.builtin.include_role:
+            name: "labocbz.install_apache"
+
+        - name: "Include labocbz.add_apache_confs"
+          tags:
+            - "labocbz.add_apache_confs"
+          vars:
+            add_apache_confs_http_listen_port: "{{ inv_add_apache_confs_http_listen_port }}"
+            add_apache_confs_https_listen_port: "{{ inv_add_apache_confs_https_listen_port }}"
+            add_apache_confs_ldap_url: "{{ inv_add_apache_confs_ldap_url }}"
+            add_apache_confs_ldap_port: "{{ inv_add_apache_confs_ldap_port }}"
+            add_apache_confs_ldap_dc: "{{ inv_add_apache_confs_ldap_dc }}"
+            add_apache_confs_auth_ldap_url: "{{ inv_add_apache_confs_auth_ldap_url }}"
+            add_apache_confs_custom_ldap_base_header: "{{ inv_add_apache_confs_custom_ldap_base_header }}"
+            add_apache_confs_webmaster: "{{ inv_add_apache_confs_webmaster }}"
+            add_apache_confs_request_body: "{{ inv_add_apache_confs_request_body }}"
+            add_apache_confs_security_body_limit: "{{ inv_add_apache_confs_security_body_limit }}"
+            add_apache_confs_ssl_files_path: "{{ inv_add_apache_confs_ssl_files_path }}"
+            add_apache_confs_confs_path: "{{ inv_add_apache_confs_confs_path }}"
+            add_apache_confs_base_document_root: "{{ inv_add_apache_confs_base_document_root }}"
+            add_apache_confs_configurations: "{{ inv_add_apache_confs_configurations }}"
+          ansible.builtin.include_role:
+            name: "labocbz.add_apache_confs"
+
+        - name: "Include labocbz.add_logrotate_confs"
+          tags:
+            - "labocbz.add_logrotate_confs"
+          vars:
+            logrotate_configurations: "{{ inv_logrotate_apache_configurations }}"
+          ansible.builtin.include_role:
+            name: "labocbz.add_logrotate_confs"
+
+        - name: "Block all trafic from other hosts on port SonarQube (disable acces to SonarQube without Apache2)"
+          ansible.builtin.iptables:
+            chain: "INPUT"
+            protocol: "tcp"
+            destination_port: "{{ inv_install_sonarqube_web_port }}"
+            jump: "DROP"
+            source: "! 127.0.0.1"
+            comment: "Force external user to use SonarQube"
+
+        - name: "Block all trafic from other hosts on port Elasticsearch (disable acces to Elasticsearch)"
+          ansible.builtin.iptables:
+            chain: "INPUT"
+            protocol: "tcp"
+            destination_port: "{{ inv_install_sonarqube_elasticsearch_port }}"
+            jump: "DROP"
+            source: "! 127.0.0.1"
+            comment: "Force external user to use Elasticsearch"
+
+        - name: "Block all trafic from other hosts on port PostgreSQL (disable acces to PostgreSQL)"
+          ansible.builtin.iptables:
+            chain: "INPUT"
+            protocol: "tcp"
+            destination_port: "5432"
+            jump: "DROP"
+            source: "! 127.0.0.1"
+            comment: "Force external user to use PostgreSQL"
