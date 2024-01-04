@@ -1,5 +1,5 @@
 ---
-inv_install_sonarqube: false
+inv_install_sonarqube: true
 
 inv_prepare_host_sonarqube_system_users:
   - login: "sonarqube"
@@ -21,7 +21,7 @@ inv_install_sonarqube_log_path: "/var/log/sonarqube"
 inv_install_sonarqube_version: "10.3.0.82913"
 
 inv_install_sonarqube_web_heap: "512m"
-inv_install_sonarqube_web_host: "127.0.0.1"
+inv_install_sonarqube_web_host: "0.0.0.0"
 inv_install_sonarqube_web_context: "/"
 inv_install_sonarqube_web_port: 9000
 
