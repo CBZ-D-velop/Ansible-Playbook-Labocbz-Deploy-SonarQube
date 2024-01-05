@@ -25,7 +25,7 @@ If remote certificates are available, the playbook can download and install them
 
 ## Deployment diagramm
 
-![](./assets/Ansible-Role-Labocbz-Install-SonarQube.drawio.svg)
+![](./assets/Ansible-Playbook-Labocbz-Install-SonarQube.drawio.svg)
 
 Here is a possible deployment example with this playbook. The components involved are Apache2, SonarQube, PostgreSQL, and Elasticsearch. We observe that clients access SonarQube through Apache2, which acts as an SSL/TLS proxy. This also applies to analysis results. SonarQube communicates with Elasticsearch and PostgreSQL on the same machine. Elasticsearch is embedded in the SonarQube binaries, while the installation of PostgreSQL is handled in a very basic but sufficient manner by the SonarQube installation role.
 
