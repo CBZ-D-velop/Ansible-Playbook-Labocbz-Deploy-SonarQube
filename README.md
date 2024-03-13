@@ -16,18 +16,30 @@
 ![Tag: SSL/TLS](https://img.shields.io/badge/Tech-SSL%2FTLS-orange)
 ![Tag: SonarQube](https://img.shields.io/badge/Tech-SonarQube-orange)
 ![Tag: PostgreSQL](https://img.shields.io/badge/Tech-PostgreSQL-orange)
+![Tag: Docker](https://img.shields.io/badge/Tech-Docker-orange)
+
 
 An Ansible playbook to deploy and configure a SonarQube server on your hosts.
 
-This Ansible playbook orchestrates the installation of SonarQube, PostgreSQL, and Apache2. Notably, SonarQube lacks native SSL support, making the presence of an SSL reverse proxy highly recommended, although its installation is not mandatory in this playbook. The playbook ensures the installation of Java, with version 17 strongly advised, as SonarQube requires a version equal to or greater than 11. Additionally, Apache2 installation is conditional based on a boolean variable.
+This Ansible playbook orchestrates the seamless deployment of SonarQube along with Apache2 as a reverse proxy, ensuring optimal performance and security for your development environment. SonarQube, a powerful code quality and security analysis tool, is deployed alongside PostgreSQL, managed through Docker containers, to provide a robust and scalable database backend.
 
-If remote certificates are available, the playbook can download and install them for Apache2. Security measures, including mod evasive, mod qos, WAF, and optimization configurations, are also managed.
+Notably, SonarQube lacks native SSL support, making the presence of an SSL reverse proxy highly recommended for secure communication. Although SSL installation is not mandatory in this playbook, it is strongly encouraged to enhance the overall security posture of the deployment.
+
+The playbook utilizes Docker to deploy SonarQube and PostgreSQL, eliminating the need for manual installation and ensuring consistency across environments. Apache2 installation, serving as the reverse proxy, is included to facilitate secure communication and efficient routing of incoming requests.
+
+With Docker handling the deployment of SonarQube and PostgreSQL, the playbook streamlines the setup process, reducing complexity and ensuring reproducibility. By focusing on essential components and leveraging containerization technology, the playbook offers a straightforward and scalable solution for managing code quality and security analysis in your development environment.
+
+With comprehensive security measures, including SSL configuration for Apache2, along with optimized performance settings, you can confidently deploy SonarQube and Apache2 while ensuring high availability, performance, and security for your applications.
 
 ## Deployment diagramm
 
-![](./assets/Ansible-Role-Labocbz-Install-SonarQube.drawio.svg)
+![Ansible-Playbook-Labocbz-Install-SonarQube.drawio](./assets/Ansible-Playbook-Labocbz-Install-SonarQube.drawio.svg)
 
-Here is a possible deployment example with this playbook. The components involved are Apache2, SonarQube, PostgreSQL, and Elasticsearch. We observe that clients access SonarQube through Apache2, which acts as an SSL/TLS proxy. This also applies to analysis results. SonarQube communicates with Elasticsearch and PostgreSQL on the same machine. Elasticsearch is embedded in the SonarQube binaries, while the installation of PostgreSQL is handled in a very basic but sufficient manner by the SonarQube installation role.
+In this potential deployment scenario orchestrated by the playbook, we envision a robust architecture comprising Apache2, SonarQube, PostgreSQL, and Elasticsearch. Clients interact with SonarQube through Apache2, which serves as the SSL/TLS proxy, ensuring secure communication channels for accessing SonarQube functionalities and analysis results.
+
+Within the deployment, SonarQube establishes communication with Elasticsearch and PostgreSQL, both residing on the same machine. Elasticsearch is seamlessly integrated into the SonarQube binaries, enhancing the search and analysis capabilities of the platform. The installation and configuration of PostgreSQL are efficiently handled by the SonarQube installation role, ensuring a basic yet functional setup for database management.
+
+This deployment architecture not only facilitates secure and efficient access to SonarQube but also ensures seamless integration with Elasticsearch and PostgreSQL. By leveraging Apache2 as the SSL/TLS proxy and incorporating Elasticsearch within the SonarQube environment, the playbook offers a comprehensive solution for managing code quality and security analysis in your development environment.
 
 ## Tests and simulations
 
@@ -104,6 +116,12 @@ Here you can put your change to keep a trace of your work and decisions.
 * You can install or not Apache2
 * Tests added and validated with a local project to analyse
 * Pay attention of self signed certs !
+
+### 2024-03-02: Fix and CI
+
+* Added support for new CI base
+* Edit all vars with __
+* Tested and validated on Docker
 
 ## Authors
 
