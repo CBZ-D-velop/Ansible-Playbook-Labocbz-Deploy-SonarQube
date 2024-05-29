@@ -23,7 +23,7 @@ platforms:
     cgroup_manager: "cgroupfs"
     storage_driver: "overlay2"
     networks:
-      - name: "molecule-cicd-docker-dind-deploy-docker"
+      - name: "molecule-cicd-docker-dind-deploy-sonarqube"
 
 provisioner:
   name: "ansible"
