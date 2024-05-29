@@ -1,7 +1,0 @@
----
-- name: "Include labocbz.deploy_sonarqube playbook"
-  tags:
-      - "labocbz.deploy_sonarqube"
-  vars:
-    tower_env: "cicd-ubuntu-22"
-  ansible.builtin.import_playbook: "../../playbook.yml"

@@ -18,7 +18,6 @@
 ![Tag: PostgreSQL](https://img.shields.io/badge/Tech-PostgreSQL-orange)
 ![Tag: Docker](https://img.shields.io/badge/Tech-Docker-orange)
 
-
 An Ansible playbook to deploy and configure a SonarQube server on your hosts.
 
 This Ansible playbook orchestrates the seamless deployment of SonarQube along with Apache2 as a reverse proxy, ensuring optimal performance and security for your development environment. SonarQube, a powerful code quality and security analysis tool, is deployed alongside PostgreSQL, managed through Docker containers, to provide a robust and scalable database backend.
@@ -48,7 +47,6 @@ This deployment architecture not only facilitates secure and efficient access to
 You have to run multiples tests. *tests with an # are mandatory*
 
 ```MARKDOWN
-# lint
 # syntax
 # converge
 # idempotence
@@ -73,7 +71,6 @@ yamllint -c ./.yamllint .
 ansible-lint --config=./.ansible-lint .
 
 # Execute and test your playbook
-molecule lint
 molecule create
 molecule list
 molecule converge
@@ -122,6 +119,14 @@ Here you can put your change to keep a trace of your work and decisions.
 * Added support for new CI base
 * Edit all vars with __
 * Tested and validated on Docker
+
+### 2024-05-19: New CI
+
+* Added Markdown lint to the CICD
+* Rework all Docker images
+* Change CICD vars convention
+* New workers
+* Removed all automation based on branch
 
 ## Authors
 
