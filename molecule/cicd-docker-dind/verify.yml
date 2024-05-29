@@ -2,11 +2,11 @@
 # Don't forget to keep this file updated
 # molecule/<scenario>/verify.yml
 - name: "Verify"
-  hosts: "cicd-debian-11"
+  hosts: "cicd-docker-dind"
   gather_facts: false
   tasks:
 
-    - name: "Verify DOCKER"
+    - name: "Verify Docker"
       when: inv_install_docker | default(false)
       block:
         - name: "Check docker-compose command response"
